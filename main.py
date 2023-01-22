@@ -1,9 +1,8 @@
 import requests
 from datetime import datetime
-import os
 
 USERNAME = "osimfavour"
-TOKEN = os.environ.get("PIXELA_TOKEN")
+TOKEN = "hb74ue2jedkcjdakmswp0p02d"
 today = datetime.now()
 
 
@@ -59,10 +58,9 @@ class Tracker:
 
     def update_other_day(self):
         """Update a Pixel for some other day"""
-        year = int(input("Input Year: "))
         month = int(input("Input Month: "))
         day = int(input("Input Day: "))
-        date_to_update = datetime(year=year, month=month, day=day)
+        date_to_update = datetime(year=2023, month=month, day=day)
         update_endpoint = f"{self.pixela_endpoint}/{USERNAME}/graphs/{self.graph_id}/{date_to_update.strftime('%Y%m%d')}"
         pixel_update = {
             "quantity": input(f"How many {self.unit} was it? ")
@@ -76,10 +74,9 @@ class Tracker:
 
     def delete_other_day(self):
         """Delete a Pixel for some other day"""
-        year = int(input("Input Year: "))
         month = int(input("Input Month: "))
         day = int(input("Input Day: "))
-        date_to_delete = datetime(year=year, month=month, day=day)
+        date_to_delete = datetime(year=2023, month=month, day=day)
         delete_endpoint = f"{self.pixela_endpoint}/{USERNAME}/graphs/{self.graph_id}/{date_to_delete.strftime('%Y%m%d')}"
 
         response = requests.delete(url=delete_endpoint, headers=self.headers)
@@ -107,23 +104,28 @@ class Tracker:
         else:
             print("Typo Error!")
 
+code_tracker = Tracker("graph5", "hours", "code")
+mental_shift = Tracker("graph6", "pages", "read")
+word_study = Tracker("graph7", "hours", "study")
+power_shift = Tracker("graph8", "hours", "pray")
+build_up = Tracker("graph9", "build-ups", "workout")
 
-code_tracker = Tracker("graph1", "hours", "code")
-mental_dimension = Tracker("graph2", "pages", "read")
-word_study = Tracker("graph3", "hours", "study")
-power_shift = Tracker("graph4", "hours", "pray")
 
 tracking_habits = True
 while tracking_habits:
-    question_answer = input("What Habit do you want to track?\nCODE TRACKER, MENTAL DIMENSION, WORD STUDY, POWER SHIFT\n")
+    question_answer = input(
+        "What Habit do you want to track?\nCODE TRACKER, MENTAL SHIFT, WORD STUDY, POWER SHIFT, WORKOUT\n")
     if "CODE".lower() in question_answer:
         code_tracker.instructions()
+    elif "WORKOUT".lower() in question_answer:
+        build_up.instructions()
     elif "MENTAL".lower() in question_answer:
-        mental_dimension.instructions()
+        mental_shift.instructions()
     elif "WORD".lower() in question_answer:
         word_study.instructions()
     elif "POWER".lower() or "PRAYER".lower() in question_answer:
         power_shift.instructions()
+    
     else:
         print("Sorry, you made a Typo!")
         tracking_habits = False
